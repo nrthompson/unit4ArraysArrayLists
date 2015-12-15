@@ -1,4 +1,5 @@
-
+import java.util.Scanner;
+import java.util.Random;
 /**
  * The model for radar scan and accumulator
  * 
@@ -7,21 +8,21 @@
  */
 public class Radar
 {
-    
+
     // stores whether each cell triggered detection for the current scan of the radar
     // (true represents a detected monster, which may be a false positive)
     private boolean[][] currentScan;
-    
+
     // value of each cell is incremented for each scan in which that cell triggers detection
     private int[][] accumulator;
-    
+
     // location of the monster
     private int monsterLocationRow;
     private int monsterLocationCol;
 
     // probability that a cell will trigger a false detection (must be >= 0 and < 1)
     private double noiseFraction;
-    
+
     // number of scans of the radar since construction
     private int numScans;
 
@@ -34,22 +35,19 @@ public class Radar
     public Radar(int rows, int cols)
     {
         // initialize the currentScan 2D array and the accumulator 2D array
-        
-        
-        //
-        // !!! add code here !!!
-        //
-        
-        
+
+        currentScan = new boolean[rows][cols];
+        this.accumulator = new int[rows][cols];
+
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method for the unit test
         monsterLocationRow = (int)(Math.random() * rows);
         monsterLocationCol = (int)(Math.random() * cols);
-        
+
         noiseFraction = 0.05;
         numScans= 0;
     }
-    
+
     /**
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
@@ -62,13 +60,27 @@ public class Radar
         //    3. inject noise into the grid
         //    4. update the accumulator 2D array based on the state of the currentScan 2D array
         //    5. increment the numScans instance variable
+
+        for (int i = 0; i < currentScan.length; i++)
+        {
+            for (int e = 0; e < currentScan[i].length; e++)
+            {
+                currentScan[i][e] = false;
+            }
+        }
+
+        for (int i = 0; i < accumulator.length; i++)
+        {
+            for (int e = 0; e < accumulator[i].length; e++)
+            {
+                if (currentScan[i][e] == true)
+                {
+                    accumulator[i][e]++;
+                }
+            }
+        }
         
-        
-        //
-        // !!! add code here !!!
-        //
-        
-        
+        numScans++;
     }
 
     /**
@@ -83,12 +95,17 @@ public class Radar
         // remember the row and col of the monster's location
         monsterLocationRow = row;
         monsterLocationCol = col;
-        
+        Scanner scan = new Scanner(System.in);
+        System.out.println("What are the x coordinates for the monster?");
+        row = scan.nextInt();
+        System.out.println("What are the y coordinates for the monster?");
+        col = scan.nextInt();
+
         // update the radar grid to show that something was detected at the specified location
         currentScan[row][col] = true;
     }
-    
-     /**
+
+    /**
      * Sets the probability that a given cell will generate a false detection
      * 
      * @param   fraction    the probability that a given cell will generate a flase detection expressed
@@ -98,7 +115,7 @@ public class Radar
     {
         noiseFraction = fraction;
     }
-    
+
     /**
      * Returns true if the specified location in the radar grid triggered a detection.
      * 
@@ -110,7 +127,7 @@ public class Radar
     {
         return currentScan[row][col];
     }
-    
+
     /**
      * Returns the number of times that the specified location in the radar grid has triggered a
      *  detection since the constructor of the radar object.
@@ -124,7 +141,7 @@ public class Radar
     {
         return accumulator[row][col];
     }
-    
+
     /**
      * Returns the number of rows in the radar grid
      * 
@@ -134,7 +151,7 @@ public class Radar
     {
         return currentScan.length;
     }
-    
+
     /**
      * Returns the number of columns in the radar grid
      * 
@@ -144,7 +161,7 @@ public class Radar
     {
         return currentScan[0].length;
     }
-    
+
     /**
      * Returns the number of scans that have been performed since the radar object was constructed
      * 
@@ -154,7 +171,7 @@ public class Radar
     {
         return numScans;
     }
-    
+
     /**
      * Sets cells as falsely triggering detection based on the specified probability
      * 
@@ -166,12 +183,18 @@ public class Radar
         // detected as a false positive. Use the Math.random method to determine if each cell should be set
         // as a false positive.
         
-        
-        //
-        // !!! add code here !!!
-        //
-        
-        
+        Random rand = new Random();
+        for (int i = 0; i < currentScan.length; i++)
+        {
+            for (int e = 0; e <= currentScan[i].length; e++)
+            {
+                int n = rand.nextInt(20);
+                if (n == 1)
+                {
+                    currentScan[i][e] = true;
+                }
+            }
+        }
+
     }
-    
 }
