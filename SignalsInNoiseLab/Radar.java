@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.lang.Math;
 /**
  * The model for radar scan and accumulator
  * 
@@ -69,6 +70,9 @@ public class Radar
             }
         }
 
+        currentScan[monsterLocationRow][monsterLocationCol] = true;
+        injectNoise();
+
         for (int i = 0; i < accumulator.length; i++)
         {
             for (int e = 0; e < accumulator[i].length; e++)
@@ -79,7 +83,7 @@ public class Radar
                 }
             }
         }
-        
+
         numScans++;
     }
 
@@ -95,11 +99,6 @@ public class Radar
         // remember the row and col of the monster's location
         monsterLocationRow = row;
         monsterLocationCol = col;
-        Scanner scan = new Scanner(System.in);
-        System.out.println("What are the x coordinates for the monster?");
-        row = scan.nextInt();
-        System.out.println("What are the y coordinates for the monster?");
-        col = scan.nextInt();
 
         // update the radar grid to show that something was detected at the specified location
         currentScan[row][col] = true;
@@ -182,17 +181,19 @@ public class Radar
         // The noiseFraction instance variable is the probability that a given cell will be
         // detected as a false positive. Use the Math.random method to determine if each cell should be set
         // as a false positive.
-        
+
         Random rand = new Random();
+
         for (int i = 0; i < currentScan.length; i++)
         {
-            for (int e = 0; e <= currentScan[i].length; e++)
+            for (int e = 0; e < currentScan[i].length; e++)
             {
-                int n = rand.nextInt(20);
-                if (n == 1)
+                double n = Math.random();
+                if (n < noiseFraction)
                 {
                     currentScan[i][e] = true;
                 }
+
             }
         }
 
